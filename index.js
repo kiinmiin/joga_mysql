@@ -63,6 +63,22 @@ app.get('/article/:slug', (req, res) => {
     });
 });
 
+app.get('/author/:id', (req, res) => {
+    let query = `SELECT * FROM article WHERE author_id=${req.params.id}`;
+    con.query(query, (err, result) => {
+        if (err) throw (err);
+        let authorQuery = `SELECT name FROM author WHERE id=${req.params.id}`;
+        con.query(authorQuery, (err, authorResult) => {
+            if (err) throw (err);
+            let authorName = authorResult[0].name;
+            console.log(authorName)
+            res.render('author', {
+                articles: result,
+                author_name: authorName
+            }); 
+        });
+    });
+});
 
 // rakenduse algus punkt
 app.listen(3003, () => {
